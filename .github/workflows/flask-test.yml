@@ -21,7 +21,10 @@ jobs:
       run: docker image build --no-cache -t myflask-test .
 
     - name: Run Flask Docker container
-      run: docker container run -d --name myflask-ac -p 8001:8001 myflask-test
+      run: |
+        docker container run -d --name myflask-ac -p 8001:8001 myflask-test
+        docker logs --tail 200 myflask-ac
+        docker exec myflask-ac sh -lc 'ss -lntp || netstat -lntp || true'
     - name: Test Flask app
       run: |
         sleep 10
